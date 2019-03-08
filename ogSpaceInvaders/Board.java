@@ -131,7 +131,7 @@ public class Board extends JPanel implements Runnable, Commons {
 		Graphics g = this.getGraphics();
 		g.setColor(Color.BLACK);
 		g.fillRect(0,0,BOARD_WIDTH, BOARD_HEIGHT);
-
+		
 		g.setColor(new Color(0, 32, 48));
 		g.fillRect(50, BOARD_WIDTH/2 - 30, BOARD_WIDTH-100, 50);
 
@@ -282,16 +282,11 @@ public class Board extends JPanel implements Runnable, Commons {
 		}
 
 		public void keyPressed(KeyEvent e) {
-
 			player.keyPressed(e);
-
 			int x = player.getX();
 			int y = player.getY();
-
 			int key = e.getKeyCode();
-
 			if (key == KeyEvent.VK_SPACE) {
-
 				if (ingame) {
 					if (!shot.isVisible()) {
 						shot = new Shot(x, y);
