@@ -1,5 +1,3 @@
-package com.zetcode;
-
 import javax.swing.ImageIcon;
 
 public class Shot extends Sprite {
