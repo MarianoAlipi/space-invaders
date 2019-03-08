@@ -33,16 +33,10 @@ public class Board extends JPanel implements Runnable, Commons {
 	private Thread animator;
 
 	public Board() {
-
-		initBoard();
-	}
-
-	private void initBoard() {
-
 		addKeyListener(new TAdapter());
 		setFocusable(true);
 		d = new Dimension(BOARD_WIDTH, BOARD_HEIGHT);
-		setBackground(Color.black);
+		setBackground(Color.BLACK);
 
 		gameInit();
 		setDoubleBuffered(true);
@@ -67,7 +61,7 @@ public class Board extends JPanel implements Runnable, Commons {
 
 		player = new Player();
 		shot = new Shot();
-		if ((animator == null) || !ingame) {
+		if ((animator == null) || (!ingame)) {
 			animator = new Thread(this);
 			animator.start();
 		}
@@ -288,13 +282,19 @@ public class Board extends JPanel implements Runnable, Commons {
 		}
 
 		public void keyPressed(KeyEvent e) {
+
 			player.keyPressed(e);
+
 			int x = player.getX();
 			int y = player.getY();
-			if (ingame) {
-				if (e.isAltDown()) {
+
+			int key = e.getKeyCode();
+
+			if (key == KeyEvent.VK_SPACE) {
+
+				if (ingame) {
 					if (!shot.isVisible()) {
-						shot = new Shot(x,y);
+						shot = new Shot(x, y);
 					}
 				}
 			}

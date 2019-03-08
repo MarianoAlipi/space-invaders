@@ -1,63 +1,43 @@
 import javax.swing.ImageIcon;
 
 public class Alien extends Sprite {
-
-	private Bomb bomb;
-	private final String alienImg = "src/images/alien.png";
+	private Bomb mBomb;
+	private final String path = "./img/alien.png";
 
 	public Alien(int x, int y) {
-
-		initAlien(x, y);
-	}
-
-	private void initAlien(int x, int y) {
-
-		this.x = x;
-		this.y = y;
-
-		bomb = new Bomb(x, y);
-		ImageIcon ii = new ImageIcon(alienImg);
+		mX = x;
+		mY = y;
+		mBomb = new Bomb(x,y);
+		ImageIcon ii = new ImageIcon(path);
 		setImage(ii.getImage());
 	}
 
 	public void act(int direction) {
-
-		this.x += direction;
+		mX += direction;
 	}
 
 	public Bomb getBomb() {
-
-		return bomb;
+		return mBomb;
 	}
 
 	public class Bomb extends Sprite {
-
-		private final String bombImg = "src/images/bomb.png";
-		private boolean destroyed;
+		private final String path = "./img/bomb.png";
+		private boolean mDestroyed;
 
 		public Bomb(int x, int y) {
-
-			initBomb(x, y);
-		}
-
-		private void initBomb(int x, int y) {
-
 			setDestroyed(true);
-			this.x = x;
-			this.y = y;
-			ImageIcon ii = new ImageIcon(bombImg);
-			setImage(ii.getImage());
-
+			mX = x;
+			mY = y;
+			ImageIcon ii = new ImageIcon(path);
+			mImage = ii.getImage();
 		}
 
 		public void setDestroyed(boolean destroyed) {
-
-			this.destroyed = destroyed;
+			mDestroyed = destroyed;
 		}
 
 		public boolean isDestroyed() {
-
-			return destroyed;
+			return mDestroyed;
 		}
 	}
 }
