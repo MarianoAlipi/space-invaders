@@ -19,8 +19,6 @@ public class Shot extends Item {
      * Constructor for the shot
      * @param x
      * @param y
-     * @param width
-     * @param height
      * @param game 
      */
     public Shot(int x, int y, Game game) {
@@ -33,7 +31,8 @@ public class Shot extends Item {
       this.collision = false;
       this.visible = true;
       this.hitbox = new Rectangle(x, y, width, height);
-      this.sound = new SoundClip("/sounds/bounce.wav");
+      this.sound = new SoundClip("/sounds/pew.wav");
+      sound.play();
     }
     
     /**
