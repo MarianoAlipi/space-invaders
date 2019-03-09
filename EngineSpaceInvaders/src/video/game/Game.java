@@ -77,13 +77,13 @@ public class Game implements Runnable {
         player = new Player(270, 280, 15, 10, this);
         setShot(null);
 
-        int blockNo = 0;
-        aliensLeft = 48;
+        int alienNo = 0;
+        aliensLeft = 24;
         aliens = new Alien[aliensLeft];
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 6; j++) {
-                aliens[blockNo] = new Alien(j * 80 + 10, i * 30 + 40, this);
-                blockNo++;
+                aliens[alienNo] = new Alien(150 + 18 * j, 5 + 18 * i, this);
+                alienNo++;
             }
         }
 
@@ -218,13 +218,12 @@ public class Game implements Runnable {
            
             // Display "PAUSED"
             if (paused) {
-                //g.setFont(pauseFont);
-                //g.drawString("PAUSED", getWidth() / 6 + 18, getHeight() / 2);
-
+                
+                // Background
 		g.setColor(new Color(0, 32, 48));
 		g.fillRect(50, getWidth() / 2 - 30, getWidth() - 100, 50);
 
-
+                // Text
 		g.setColor(Color.white);
 		g.setFont(gameFont);
 		g.drawString("PAUSED", getWidth() / 3 + 30, getWidth() / 2);
