@@ -226,7 +226,7 @@ public class Game implements Runnable {
 
 
 		g.setColor(Color.white);
-		g.setFont();
+		g.setFont(gameFont);
 		g.drawString("PAUSED", getWidth() / 3 + 30, getWidth() / 2);
             }
             
