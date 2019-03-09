@@ -66,10 +66,10 @@ public class Player extends Item {
         
       
         // Reset x position and y position if collision with screen limits
-        if (getX() + getWidth() >= game.getWidth()){
-          setX(game.getWidth() - getWidth());
-        } else if (getX() <= 0) {
-          setX(0);
+        if (getX() + getWidth() > game.getWidth() - 5) {
+          setX(game.getWidth() - getWidth() - 5);
+        } else if (getX() < 5) {
+          setX(5);
         }
         
         // Relocate hitbox

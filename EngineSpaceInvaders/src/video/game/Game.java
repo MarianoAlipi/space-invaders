@@ -32,8 +32,6 @@ public class Game implements Runnable {
     private GameState gameState;        // flag for the game state.
     private int pauseInterval;          // to set an interval for pausing
     private int pauseIntervalCounter;   // to count the frames between pauses
-    private Font pauseFont;             // the font for the "PAUSED" text
-    private Font scoreFont;             // the font for the score display
     private Font gameFont;              // the game's font
     private Player player;              // the  player
     private Shot shot;                  // the player's shot
@@ -59,8 +57,6 @@ public class Game implements Runnable {
         paused = false;
         gameState = GameState.PLAYING;
         pauseInterval = 10;
-        pauseFont = new Font("Arial", Font.BOLD, 30);
-        scoreFont = new Font("Arial", Font.BOLD, 30);
         gameFont = new Font("Helvetica", Font.BOLD, 14);
         score = 0;
         keyManager = new KeyManager();
@@ -213,9 +209,9 @@ public class Game implements Runnable {
             }
             
             // Display the score
-            g.setFont(scoreFont);
+            g.setFont(gameFont);
             g.setColor(Color.white);
-            g.drawString("Score: " + getScore(), 10, 30);
+            g.drawString("SCORE: " + getScore(), 5, getHeight() - 5);
            
             // Display "PAUSED"
             if (paused) {
@@ -248,14 +244,14 @@ public class Game implements Runnable {
             
             // If the player lost
             if (getGameState() == GameState.LOST) {
-                g.setFont(pauseFont);
+                g.setFont(gameFont);
                 g.drawString("GAME OVER", getWidth() / 12, getHeight() / 2); 
                 g.setFont(new Font("Arial", Font.PLAIN, 40));
                 g.drawString("Press R to restart.", getWidth() / 6 + 15, getHeight() / 2 + 40);
             }
             // If the player won
             else if (getGameState() == GameState.WON) {
-                g.setFont(pauseFont);
+                g.setFont(gameFont);
                 g.drawString("YOU WIN!", getWidth() / 6 + 5, getHeight() / 2); 
                 g.setFont(new Font("Arial", Font.PLAIN, 40));
                 g.drawString("Press R to restart.", getWidth() / 6 + 15, getHeight() / 2 + 40);
@@ -406,7 +402,7 @@ public class Game implements Runnable {
      */
     public void showMessage(Graphics g, String text) {
         g.setColor(Color.black);
-        g.setFont(pauseFont);
+        g.setFont(gameFont);
         
         g.drawString(text, getWidth() / 5, getHeight() / 2 + 60);
     }

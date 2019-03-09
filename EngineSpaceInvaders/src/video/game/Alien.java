@@ -1,8 +1,9 @@
 package video.game;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.Random;
+import javax.swing.ImageIcon;
 /**
  * @author MarcelA00821875
  * @author MarianoA00822247
@@ -14,6 +15,7 @@ public class Alien extends Item {
     private boolean dying;          // to indicate if the alien has been hit and is in the process of disappearing
     private enum Direction {left, right}; // to indicate the current direction in which aliens are moving
     private Direction direction;
+    private Bomb bomb;              // the alien's bomb
     private SoundClip explosion;    // sound effect for when the alien is killed
     private int framesCounter;      // to count a number of frames to show a different sprite
     
@@ -31,6 +33,7 @@ public class Alien extends Item {
         this.game = g;
         this.hitbox = new Rectangle(getX(), getY(), getWidth(), getHeight());
         this.dying = false;
+        this.bomb = null;
         this.framesCounter = 0;
         this.explosion = new SoundClip("/sounds/explosion.wav");
     }
@@ -63,11 +66,26 @@ public class Alien extends Item {
                 setY(getY() + 15); // 15 is the offset to move downwards
             }
             
-            
+            // If the aliens reach the green line, game over.
             if (getY() > 290 - getHeight()) {
                     game.setGameState(Game.GameState.LOST);
             }
             
+            // Drop bombs randomly
+            Random generator = new Random();
+            if ((generator.nextInt(25) == 5) && (bomb == null)) {
+                    bomb = new Bomb(getX(), getY(), game);
+            }
+            
+            // Tick bomb (if it exists)
+            if (bomb != null) {
+                if (bomb.isVisible())
+                    bomb.tick();
+                else
+                    bomb = null;
+            }
+            
+            // Move alien horizontally
             setX( getX() + (getDirection() == Direction.left ? -1 : 1 ) );
             
         } else {
@@ -83,6 +101,12 @@ public class Alien extends Item {
             g.drawImage(Assets.alien, getX(), getY(), getWidth(), getHeight(), null);
         else
             g.drawImage(Assets.explosion, getX(), getY(), getWidth(), getHeight(), null);
+        
+        // Render bomb (if it exists)
+        if (bomb != null) {
+            if (bomb.isVisible())
+                bomb.render(g);
+        }
         
         // Draw hitbox (for debugging)
         // g.setColor(Color.red);
