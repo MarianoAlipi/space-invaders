@@ -9,8 +9,8 @@ import java.awt.Rectangle;
  */
 public class Player extends Item {
     
-    private int speed;                      // the player's speed
-    private Game game;                      // the running game
+    private int speed;  // the player's speed
+    private Game game;  // the running game
     
     /**
      * Constructor for the player
@@ -26,7 +26,7 @@ public class Player extends Item {
       this.width = width;
       this.height = height;
       this.game = game;
-      this.speed = 3;
+      this.speed = 2;
       this.hitbox = new Rectangle(x, y, width, height);
     }
     

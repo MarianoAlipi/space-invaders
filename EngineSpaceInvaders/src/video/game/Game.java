@@ -33,6 +33,7 @@ public class Game implements Runnable {
     private int pauseIntervalCounter;   // to count the frames between pauses
     private Font pauseFont;             // the font for the "PAUSED" text
     private Font scoreFont;             // the font for the score display
+    private Font gameFont;              // the game's font
     private Player player;              // the  player
     private Shot shot;                  // the player's shot
     private Alien[] aliens;             // the aliens
@@ -57,8 +58,9 @@ public class Game implements Runnable {
         paused = false;
         gameState = 0;
         pauseInterval = 10;
-        pauseFont = new Font("Arial", Font.BOLD, 70);
+        pauseFont = new Font("Arial", Font.BOLD, 30);
         scoreFont = new Font("Arial", Font.BOLD, 30);
+        gameFont = new Font("Helvetica", Font.BOLD, 14);
         score = 0;
         keyManager = new KeyManager();
         fileName = "SpaceInvaders_save.txt";
@@ -214,9 +216,18 @@ public class Game implements Runnable {
             g.setColor(Color.white);
             g.drawString("Score: " + getScore(), 10, 30);
            
+            // Display "PAUSED"
             if (paused) {
-                g.setFont(pauseFont);
-                g.drawString("PAUSED", getWidth() / 6 + 18, getHeight() / 2);
+                //g.setFont(pauseFont);
+                //g.drawString("PAUSED", getWidth() / 6 + 18, getHeight() / 2);
+
+		g.setColor(new Color(0, 32, 48));
+		g.fillRect(50, getWidth() / 2 - 30, getWidth() - 100, 50);
+
+
+		g.setColor(Color.white);
+		g.setFont();
+		g.drawString("PAUSED", getWidth() / 3 + 30, getWidth() / 2);
             }
             
             if (savedLoaded == 1) {
