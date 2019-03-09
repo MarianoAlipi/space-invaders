@@ -127,20 +127,17 @@ public class Game implements Runnable {
             setGameState(GameState.PLAYING);
         }
         
+        // Restart the game
+        if (keyManager.r) {
+            restartGame();
+        }
+        
         // To pause the game
         pauseIntervalCounter++;
         if (keyManager.p) {
             if (pauseIntervalCounter > pauseInterval) {
                 paused = !paused;
                 pauseIntervalCounter = 0;
-            }
-        }
-        
-        // If the player won or lost
-        if (getGameState() == GameState.WON || getGameState() == GameState.LOST) {
-            if (keyManager.r) {
-                // Restart the game
-                restartGame();
             }
         }
         
