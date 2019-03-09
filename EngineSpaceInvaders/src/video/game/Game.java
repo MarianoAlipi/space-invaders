@@ -352,13 +352,15 @@ public class Game implements Runnable {
                     fileOut.print(1 + " ");
                 }
                 // Print the alien's x, y and direction.
-                fileOut.println(alien.getX() + " " + alien.getY() + " " + alien.getDirection());
+                fileOut.println(alien.getX() + " " + alien.getY() + " " + (alien.getDirection() == Alien.Direction.left ? 0 : 1));
                 
                 // Print the bomb's data.
                 // Print if the bomb is visible (1) or not (0).
-                fileOut.print( (alien.getBomb().isVisible() ? 1 : 0) + " ");
-                // Print the bomb's x and y position.
-                fileOut.println( alien.getBomb().getX() + " " + alien.getBomb().getY() );
+                if (alien.getBomb() == null) {
+                    fileOut.println("0 0 0");
+                } else if (alien.getBomb().isVisible()) {
+                    fileOut.println( 1 + " " + alien.getBomb().getX() + " " + alien.getBomb().getY());
+                }
             }
             
             fileOut.close();
