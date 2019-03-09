@@ -1,8 +1,8 @@
 package video.game;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-
 /**
  * @author MarcelA00821875
  * @author MarianoA00822247
@@ -12,6 +12,8 @@ public class Alien extends Item {
     private Game game;
     private boolean visible;        // to show or hide the alien whether it's dead or not
     private boolean dying;          // to indicate if the alien has been hit and is in the process of disappearing
+    private enum Direction {left, right}; // to indicate the current direction in which aliens are moving
+    private Direction direction;
     private SoundClip explosion;    // sound effect for when the alien is killed
     private int framesCounter;      // to count a number of frames to show a different sprite
     
@@ -25,6 +27,7 @@ public class Alien extends Item {
         super(x, y);
         this.width = 12;
         this.height = 12;
+        this.direction = Direction.left;
         this.game = g;
         this.hitbox = new Rectangle(getX(), getY(), getWidth(), getHeight());
         this.dying = false;
@@ -36,6 +39,10 @@ public class Alien extends Item {
     public void tick() {
         // Check for collision with shot
         if (!isDying()) {
+            
+            // Relocate the hitbox.
+            hitbox.setLocation(getX(), getY());
+            
             if (game.getShot() != null) {
                 if (getHitbox().intersects(game.getShot().getHitbox())) {
                     setDying(true);
@@ -43,6 +50,26 @@ public class Alien extends Item {
                     explosion.play();
                 }
             }
+            
+            // To move downwards every time the aliens reach a border
+            // Right border
+            if ((getX() >= game.getWidth() - 30) && (getDirection() != Direction.left)) {
+                setDirection(Direction.left);
+                setY(getY() + 15); // 15 is the offset to move downwards
+            }
+            // Left border
+            if ((getX() <= 5) && (getDirection() != Direction.right)) {
+                setDirection(Direction.right);
+                setY(getY() + 15); // 15 is the offset to move downwards
+            }
+            
+            
+            if (getY() > 290 - getHeight()) {
+                    game.setGameState(Game.GameState.LOST);
+            }
+            
+            setX( getX() + (getDirection() == Direction.left ? -1 : 1 ) );
+            
         } else {
             if (framesCounter++ >= 5) {
                 setVisible(false);
@@ -58,8 +85,8 @@ public class Alien extends Item {
             g.drawImage(Assets.explosion, getX(), getY(), getWidth(), getHeight(), null);
         
         // Draw hitbox (for debugging)
-        //g.setColor(Color.red);
-        //g.drawRect(x, y, width, height);
+        // g.setColor(Color.red);
+        // g.drawRect(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight());
     }
 
     /**
@@ -71,10 +98,26 @@ public class Alien extends Item {
     }
 
     /**
+     * Get direction
+     * @return direction
+     */
+    public Direction getDirection() {
+        return direction;
+    }
+
+    /**
      * Set dying
      * @param dying 
      */
     public void setDying(boolean dying) {
         this.dying = dying;
+    }
+
+    /**
+     * Set direction
+     * @param direction 
+     */
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 }

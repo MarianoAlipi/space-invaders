@@ -28,7 +28,8 @@ public class Game implements Runnable {
     private Thread thread;
     private boolean running;            //sets up the game
     private boolean paused;             // to pause the game
-    private byte gameState;             // flag for the game state. 0: playing 1: lost 2: won
+    public enum GameState {PLAYING, LOST, WON};
+    private GameState gameState;        // flag for the game state.
     private int pauseInterval;          // to set an interval for pausing
     private int pauseIntervalCounter;   // to count the frames between pauses
     private Font pauseFont;             // the font for the "PAUSED" text
@@ -56,7 +57,7 @@ public class Game implements Runnable {
         this.height = height;
         running = false;
         paused = false;
-        gameState = 0;
+        gameState = GameState.PLAYING;
         pauseInterval = 10;
         pauseFont = new Font("Arial", Font.BOLD, 30);
         scoreFont = new Font("Arial", Font.BOLD, 30);
@@ -127,7 +128,7 @@ public class Game implements Runnable {
         // Load the game data
         if (keyManager.c) {
             loadData();
-            setGameState((byte)0);
+            setGameState(GameState.PLAYING);
         }
         
         // To pause the game
@@ -140,7 +141,7 @@ public class Game implements Runnable {
         }
         
         // If the player won or lost
-        if (gameState == 1 || gameState == 2) {
+        if (getGameState() == GameState.WON || getGameState() == GameState.LOST) {
             if (keyManager.r) {
                 // Restart the game
                 restartGame();
@@ -149,7 +150,7 @@ public class Game implements Runnable {
         
 
         // If not paused and game running (not lost or won)
-        if (!paused && gameState == 0) {
+        if (!paused && getGameState() == GameState.PLAYING) {
 
             // Move the player with collision
             player.tick();
@@ -164,7 +165,7 @@ public class Game implements Runnable {
             // Player wins
             if (getAliensLeft() <= 0) {
                 // GAME OVER: Player wins
-                gameState = 2;
+                setGameState(GameState.WON);
             }
 
             // Tick the shot
@@ -246,14 +247,14 @@ public class Game implements Runnable {
             }
             
             // If the player lost
-            if (gameState == 1) {
+            if (getGameState() == GameState.LOST) {
                 g.setFont(pauseFont);
                 g.drawString("GAME OVER", getWidth() / 12, getHeight() / 2); 
                 g.setFont(new Font("Arial", Font.PLAIN, 40));
                 g.drawString("Press R to restart.", getWidth() / 6 + 15, getHeight() / 2 + 40);
             }
             // If the player won
-            else if (gameState == 2) {
+            else if (getGameState() == GameState.WON) {
                 g.setFont(pauseFont);
                 g.drawString("YOU WIN!", getWidth() / 6 + 5, getHeight() / 2); 
                 g.setFont(new Font("Arial", Font.PLAIN, 40));
@@ -292,7 +293,7 @@ public class Game implements Runnable {
      */
     public void restartGame() {
         setScore(0);
-        setGameState((byte)0);
+        setGameState(GameState.PLAYING);
         setPaused(false);
         player = new Player(getWidth() / 2 - 50, getHeight() - 50, 100, 50, this);
         setShot(null);
@@ -471,7 +472,7 @@ public class Game implements Runnable {
      * Get gameState
      * @return 
      */
-    public byte getGameState() {
+    public GameState getGameState() {
         return gameState;
     }
     
@@ -511,7 +512,7 @@ public class Game implements Runnable {
      * Set gameState
      * @param gameState 
      */
-    public void setGameState(byte gameState) {
+    public void setGameState(GameState gameState) {
         this.gameState = gameState;
     }
 }
