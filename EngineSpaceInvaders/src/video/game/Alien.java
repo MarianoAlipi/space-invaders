@@ -33,9 +33,11 @@ public class Alien extends Item {
     @Override
     public void tick() {
         // Check for collision with shot
-        if (getHitbox().intersects(game.getShot().getHitbox())) {
-            setVisible(false);
-            explosion.play();
+        if (game.getShot() != null) {
+            if (getHitbox().intersects(game.getShot().getHitbox())) {
+                setVisible(false);
+                explosion.play();
+            }
         }
     }
 

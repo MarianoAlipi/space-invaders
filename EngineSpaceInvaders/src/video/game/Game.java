@@ -72,24 +72,17 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
-        player = new Bar(getWidth() / 2 - 50, getHeight() - 50, 100, 50, this);
-        shot = new Shot(getWidth() / 2 - 30, getHeight() - 110, 50, 50, this);
+        player = new Player(getWidth() / 2 - 50, getHeight() - 50, 15, 10, this);
+        setShot(null);
 
-        int blockNo = 0, hits = 3, counter = 0;
+        int blockNo = 0;
         aliensLeft = 48;
         aliens = new Alien[aliensLeft];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 6; j++) {
-                aliens[blockNo] = new Alien(j * 80 + 10, i * 30 + 40, hits, this);
+                aliens[blockNo] = new Alien(j * 80 + 10, i * 30 + 40, this);
                 blockNo++;
             }
-            
-            // Decrease by one the number of hits every two rows.
-            if (++counter >= 2) {
-                counter = 0;
-                hits = (hits - 1 <= 0) ? 1 : hits - 1;
-            }
-            
         }
 
         //starts to listen the keyboard input
@@ -285,7 +278,7 @@ public class Game implements Runnable {
         setScore(0);
         setGameState((byte)0);
         setPaused(false);
-        player = new Bar(getWidth() / 2 - 50, getHeight() - 50, 100, 50, this);
+        player = new Player(getWidth() / 2 - 50, getHeight() - 50, 100, 50, this);
         setShot(null);
         
         int alienNo = 0;
@@ -313,7 +306,7 @@ public class Game implements Runnable {
             // Print the player's x and y.
             fileOut.println(getPlayer().getX() + " " + getPlayer().getY());
             // Print the shot's x, y, xSpeed and ySpeed.
-            fileOut.println(getShot().getX() + " " + getShot().getY() + " " + getShot().getXSpeed() + " " + getShot().getYSpeed());
+            fileOut.println(getShot().getX() + " " + getShot().getY() + " " + getShot().getSpeed());
             
             /*
             
@@ -422,7 +415,7 @@ public class Game implements Runnable {
      *
      * @return
      */
-    public Bar getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
@@ -470,8 +463,8 @@ public class Game implements Runnable {
      * Set shot
      * @param shot 
      */
-    setShot(Shot shot) {
-        return shot;
+    public void setShot(Shot shot) {
+        this.shot = shot;
     }
     
     /**
