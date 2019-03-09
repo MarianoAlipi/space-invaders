@@ -334,16 +334,32 @@ public class Game implements Runnable {
         
             // Print score.
             fileOut.println(getScore());
-            // Print the player's x and y.
-            fileOut.println(getPlayer().getX() + " " + getPlayer().getY());
-            // Print the shot's x, y, xSpeed and ySpeed.
-            fileOut.println(getShot().getX() + " " + getShot().getY() + " " + getShot().getSpeed());
+            // Print the player's x position.
+            fileOut.print(getPlayer().getX() + " ");
+            // Print if shot is visible (1) or not (0) and its x and y position.
+            if (getShot() != null) {
+                fileOut.println(1 + " " + getShot().getX() + " " + getShot().getY());
+            } else {
+                fileOut.println("0 0 0");
+            }
             
-            /*
-            
-                IMPLEMENT THIS
-            
-             */
+            // Print the aliens' data.
+            for (Alien alien : aliens) {
+                // Print if the alien is visible (1) or not (0).
+                if (alien.isDying() || !alien.isVisible()) {
+                    fileOut.print(0 + " ");
+                } else if (alien.isVisible()) {
+                    fileOut.print(1 + " ");
+                }
+                // Print the alien's x, y and direction.
+                fileOut.println(alien.getX() + " " + alien.getY() + " " + alien.getDirection());
+                
+                // Print the bomb's data.
+                // Print if the bomb is visible (1) or not (0).
+                fileOut.print( (alien.getBomb().isVisible() ? 1 : 0) + " ");
+                // Print the bomb's x and y position.
+                fileOut.println( alien.getBomb().getX() + " " + alien.getBomb().getY() );
+            }
             
             fileOut.close();
             
