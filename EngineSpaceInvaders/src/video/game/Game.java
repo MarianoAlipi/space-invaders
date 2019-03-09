@@ -2,7 +2,6 @@ package video.game;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
@@ -12,7 +11,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import sun.font.FontDesignMetrics;
 
 /**
  *
@@ -217,16 +215,6 @@ public class Game implements Runnable {
            
             // Display "PAUSED"
             if (paused) {
-                /*
-                // Background
-		g.setColor(new Color(0, 32, 48));
-		g.fillRect(50, getWidth() / 2 - 30, getWidth() - 100, 50);
-
-                // Text
-		g.setColor(Color.white);
-		g.setFont(gameFont);
-		g.drawString("PAUSED", getWidth() / 3 + 30, getWidth() / 2);
-                */
                 showMessage(g, "PAUSED");
             }
             
@@ -291,19 +279,17 @@ public class Game implements Runnable {
         setScore(0);
         setGameState(GameState.PLAYING);
         setPaused(false);
-        player = new Player(getWidth() / 2 - 50, getHeight() - 50, 100, 50, this);
+        player = new Player(270, 280, 15, 10, this);
         setShot(null);
         
         int alienNo = 0;
-        aliensLeft = 48;
+        setAliensLeft(24);
         aliens = new Alien[aliensLeft];
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 6; j++) {
-                aliens[alienNo] = null;
-                aliens[alienNo] = new Alien(j * 80 + 10, i * 30 + 40, this);
+                aliens[alienNo] = new Alien(150 + 18 * j, 5 + 18 * i, this);
                 alienNo++;
             }
-            
         }
     }
     
