@@ -1,5 +1,6 @@
 package video.game;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
@@ -27,7 +28,6 @@ public class Alien extends Item {
         this.game = g;
         this.hitbox = new Rectangle(getX(), getY(), getWidth(), getHeight());
         this.explosion = new SoundClip("/sounds/explosion.wav");
-        this.visible = true;
     }
 
     @Override
@@ -36,6 +36,7 @@ public class Alien extends Item {
         if (game.getShot() != null) {
             if (getHitbox().intersects(game.getShot().getHitbox())) {
                 setVisible(false);
+                game.setShot(null);
                 explosion.play();
             }
         }
@@ -44,22 +45,9 @@ public class Alien extends Item {
     @Override
     public void render(Graphics g) {
         g.drawImage(Assets.alien, getX(), getY(), getWidth(), getHeight(), null);
+        
+        // Draw hitbox (for debugging)
+        //g.setColor(Color.red);
+        //g.drawRect(x, y, width, height);
     }
-
-    /**
-     * Get visible
-     * @return visible
-     */
-    public boolean isVisible() {
-        return visible;
-    }
-
-    /**
-     * Set visible
-     * @param visible 
-     */
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-    
 }

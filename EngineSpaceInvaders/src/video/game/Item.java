@@ -24,6 +24,7 @@ public abstract class Item {
     public Item(int x, int y){
         this.x = x;
         this.y = y;
+        this.visible = true;
     }
 
     public Item(int x, int y, int width, int height) {
@@ -31,6 +32,7 @@ public abstract class Item {
         this.y = y;
         this.width = width;
         this.height = height;
+        this.visible = true;
     }    
     
     /**

@@ -26,7 +26,7 @@ public class Player extends Item {
       this.width = width;
       this.height = height;
       this.game = game;
-      this.speed = 5;
+      this.speed = 3;
       this.hitbox = new Rectangle(x, y, width, height);
     }
     
@@ -49,6 +49,7 @@ public class Player extends Item {
     // tick() is used to tick the player
     @Override
     public void tick() {
+        
         // Move the player depending on flags
         if (game.getKeyManager().left) {
           setX(getX() - getSpeed());
@@ -56,6 +57,13 @@ public class Player extends Item {
         if (game.getKeyManager().right) {
           setX(getX() + getSpeed());
         }
+        
+        // Shoot
+        if (game.getKeyManager().space) {
+            if (game.getShot() == null)
+                game.setShot(new Shot(getX() + getWidth() / 2, getY() - 1, game));
+        }
+        
       
         // Reset x position and y position if collision with screen limits
         if (getX() + getWidth() >= game.getWidth()){

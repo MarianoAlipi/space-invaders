@@ -72,7 +72,7 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
-        player = new Player(getWidth() / 2 - 50, getHeight() - 50, 15, 10, this);
+        player = new Player(270, 280, 15, 10, this);
         setShot(null);
 
         int blockNo = 0;
@@ -192,8 +192,14 @@ public class Game implements Runnable {
             g.setColor(Color.black);
             g.fillRect(0, 0, width, height);
             
+            // Draw the green horizontal line
+            g.setColor(Color.green);
+            g.drawLine(0, 290, width, 290);
+            
+            // Draw the pleyer
             player.render(g);
             
+            // Draw the shot
             if (getShot() != null)
                 shot.render(g);
 
@@ -206,7 +212,7 @@ public class Game implements Runnable {
             // Display the score
             g.setFont(scoreFont);
             g.setColor(Color.white);
-            g.drawString("Score: " + getScore(), 40, 30);
+            g.drawString("Score: " + getScore(), 10, 30);
            
             if (paused) {
                 g.setFont(pauseFont);

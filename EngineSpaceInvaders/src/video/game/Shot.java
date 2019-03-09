@@ -23,14 +23,15 @@ public class Shot extends Item {
      * @param height
      * @param game 
      */
-    public Shot(int x, int y, int width, int height, Game game) {
+    public Shot(int x, int y, Game game) {
       //send x and y to the Item constructor
       super(x, y);
-      this.width = width;
-      this.height = height;
+      this.width = 1;
+      this.height = 5;
       this.game = game;
-      this.speed = 2;
+      this.speed = 4;
       this.collision = false;
+      this.visible = true;
       this.hitbox = new Rectangle(x, y, width, height);
       this.sound = new SoundClip("/sounds/bounce.wav");
     }
