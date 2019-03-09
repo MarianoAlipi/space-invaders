@@ -174,7 +174,7 @@ public class Game implements Runnable {
 
             // Tick the shot
             if (getShot() != null) {
-                if (!getShot().isSpawned())
+                if (!getShot().isVisible())
                     setShot(null);
                 else
                     shot.tick();
@@ -294,7 +294,7 @@ public class Game implements Runnable {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 6; j++) {
                 aliens[alienNo] = null;
-                aliens[alienNo] = new Alien(j * 80 + 10, i * 30 + 40, hits, this);
+                aliens[alienNo] = new Alien(j * 80 + 10, i * 30 + 40, this);
                 alienNo++;
             }
             

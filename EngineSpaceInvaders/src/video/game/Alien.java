@@ -20,7 +20,7 @@ public class Alien extends Item {
      * @param hits
      * @param g 
      */
-    public Alien(int x, int y, int hits, Game g) {
+    public Alien(int x, int y, Game g) {
         super(x, y);
         this.width = 12;
         this.height = 12;
