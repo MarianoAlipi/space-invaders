@@ -141,14 +141,14 @@ public class Ball extends Item{
         // The closer to the center, the more vertical the angle is.
         // Left side launches the ball to the left.
         // Right side launches the ball to the right.
-        if (getHitbox().intersects(game.getBar().getHitbox())) {
+        if (getHitbox().intersects(game.getPlayer().getHitbox())) {
             setYSpeed(-1 * Math.abs(getYSpeed()));
             
             // Get the bar's width.
-            int barWidth = (int) game.getBar().getHitbox().getWidth();
+            int barWidth = (int) game.getPlayer().getHitbox().getWidth();
             
             // Calculate the position where the ball hit the bar.
-            int pos = (getX() + getWidth() / 2) - (int)game.getBar().getHitbox().getX();
+            int pos = (getX() + getWidth() / 2) - (int)game.getPlayer().getHitbox().getX();
             
             // If the position is off limits, set it to the limit.
             if (pos < 0)
