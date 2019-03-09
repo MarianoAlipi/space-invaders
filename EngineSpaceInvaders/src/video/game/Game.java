@@ -34,7 +34,7 @@ public class Game implements Runnable {
     private Font pauseFont;             // the font for the "PAUSED" text
     private Font scoreFont;             // the font for the score display
     private Bar bar;                    //use a bar
-    private Ball ball;                  //use a ball
+    private Shot ball;                  //use a ball
     private Block[] blocks;             // the blocks to break
     private int blocksLeft;             // the number of blocks left
     private int score;                  // the player's score
@@ -79,7 +79,7 @@ public class Game implements Runnable {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
         bar = new Bar(getWidth() / 2 - 50, getHeight() - 50, 100, 50, this);
-        ball = new Ball(getWidth() / 2 - 30, getHeight() - 110, 50, 50, this);
+        ball = new Shot(getWidth() / 2 - 30, getHeight() - 110, 50, 50, this);
 
         int blockNo = 0, hits = 3, counter = 0;
         blocksLeft = 48;
@@ -311,7 +311,7 @@ public class Game implements Runnable {
         setGameState((byte)0);
         setPaused(false);
         bar = new Bar(getWidth() / 2 - 50, getHeight() - 50, 100, 50, this);
-        ball = new Ball(getWidth() / 2 - 30, getHeight() - 110, 50, 50, this);
+        ball = new Shot(getWidth() / 2 - 30, getHeight() - 110, 50, 50, this);
         ballPushed = false;
         setPower(null);
         setPowerState((byte)0);
@@ -475,7 +475,7 @@ public class Game implements Runnable {
      *
      * @return ball
      */
-    public Ball getBall() {
+    public Shot getBall() {
         return ball;
     }
 

@@ -8,7 +8,7 @@ import java.awt.Rectangle;
  * @author MarcelA00821875
  * @author MarianoA00822247
  */
-public class Ball extends Item{
+public class Shot extends Item{
     
     private double xSpeed, ySpeed, speed;   // the ball's horizontal, vertical and total speed
     private boolean collision;              // to check if there's a collision this frame
@@ -24,7 +24,7 @@ public class Ball extends Item{
      * @param height
      * @param game 
      */
-    public Ball(int x, int y, int width, int height, Game game) {
+    public Shot(int x, int y, int width, int height, Game game) {
       //send x and y to the Item constructor
       super(x, y);
       this.width = width;
