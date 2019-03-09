@@ -71,13 +71,8 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
-<<<<<<< HEAD
-        bar = new Bar(getWidth() / 2 - 50, getHeight() - 50, 100, 50, this);
-        ball = new Shot(getWidth() / 2 - 30, getHeight() - 110, 50, 50, this);
-=======
         player = new Player(270, 280, 15, 10, this);
         setShot(null);
->>>>>>> 9da96899814dba3b5cf5e027746c9c84f2dfe135
 
         int alienNo = 0;
         aliensLeft = 24;
@@ -284,16 +279,8 @@ public class Game implements Runnable {
         setScore(0);
         setGameState(GameState.PLAYING);
         setPaused(false);
-<<<<<<< HEAD
-        bar = new Bar(getWidth() / 2 - 50, getHeight() - 50, 100, 50, this);
-        ball = new Shot(getWidth() / 2 - 30, getHeight() - 110, 50, 50, this);
-        ballPushed = false;
-        setPower(null);
-        setPowerState((byte)0);
-=======
         player = new Player(270, 280, 15, 10, this);
         setShot(null);
->>>>>>> 9da96899814dba3b5cf5e027746c9c84f2dfe135
         
         int alienNo = 0;
         setAliensLeft(24);
@@ -441,13 +428,8 @@ public class Game implements Runnable {
      * Get the shot
      * @return shot
      */
-<<<<<<< HEAD
-    public Shot getBall() {
-        return ball;
-=======
     public Shot getShot() {
         return shot;
->>>>>>> 9da96899814dba3b5cf5e027746c9c84f2dfe135
     }
 
     /**
