@@ -14,6 +14,7 @@ public abstract class Item {
     protected int width;    // The width  
     protected int height;   // The height
     protected Rectangle hitbox; // The hitbox
+    protected boolean visible;  // Flag to show or hide the item
     
     /**
      * Set initial values to create the item
@@ -23,6 +24,7 @@ public abstract class Item {
     public Item(int x, int y){
         this.x = x;
         this.y = y;
+        this.visible = true;
     }
 
     public Item(int x, int y, int width, int height) {
@@ -30,6 +32,7 @@ public abstract class Item {
         this.y = y;
         this.width = width;
         this.height = height;
+        this.visible = true;
     }    
     
     /**
@@ -73,6 +76,14 @@ public abstract class Item {
     }
 
     /**
+     * Get visible
+     * @return visible
+     */
+    public boolean isVisible() {
+        return visible;
+    }
+    
+    /**
      * Set x
      * @param x 
      */
@@ -102,6 +113,14 @@ public abstract class Item {
      */
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    /**
+     * Set visible
+     * @param visible 
+     */
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
     /**

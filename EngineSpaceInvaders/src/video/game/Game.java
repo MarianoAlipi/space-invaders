@@ -28,23 +28,20 @@ public class Game implements Runnable {
     private Thread thread;
     private boolean running;            //sets up the game
     private boolean paused;             // to pause the game
-    private byte gameState;              // flag for the game state. 0: playing 1: lost 2: won
+    public enum GameState {PLAYING, LOST, WON};
+    private GameState gameState;        // flag for the game state.
     private int pauseInterval;          // to set an interval for pausing
     private int pauseIntervalCounter;   // to count the frames between pauses
-    private Font pauseFont;             // the font for the "PAUSED" text
-    private Font scoreFont;             // the font for the score display
-    private Bar bar;                    //use a bar
-    private Shot ball;                  //use a ball
-    private Block[] blocks;             // the blocks to break
-    private int blocksLeft;             // the number of blocks left
+    private Font gameFont;              // the game's font
+    private Player player;              // the  player
+    private Shot shot;                  // the player's shot
+    private Alien[] aliens;             // the aliens
+    private int aliensLeft;             // the number of blocks left
     private int score;                  // the player's score
     private KeyManager keyManager;      //manages the keyboard
     private String fileName;            // save-file's name
     private byte savedLoaded;           // flag to show a saved message for a few frames. 0: none 1: saved 2; loaded
     private int framesCounter;          // to count the duration of the save/loaded message
-    private Power power;                // the current power item in the game
-    private byte powerState;            // flag to determine the power state. 0: none 1: good 2: bad
-    private boolean ballPushed;         // flag to know if the ball has been pushed (first hit)
 
     /**
      * Constructor
@@ -58,18 +55,14 @@ public class Game implements Runnable {
         this.height = height;
         running = false;
         paused = false;
-        gameState = 0;
+        gameState = GameState.PLAYING;
         pauseInterval = 10;
-        pauseFont = new Font("Arial", Font.BOLD, 70);
-        scoreFont = new Font("Arial", Font.BOLD, 30);
+        gameFont = new Font("Helvetica", Font.BOLD, 14);
         score = 0;
         keyManager = new KeyManager();
-        fileName = "BreakingBad_save.txt";
+        fileName = "SpaceInvaders_save.txt";
         savedLoaded = 0;
         framesCounter = 0;
-        power = null;
-        powerState = 0;
-        ballPushed = false;
     }
 
     /**
@@ -78,24 +71,22 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
+<<<<<<< HEAD
         bar = new Bar(getWidth() / 2 - 50, getHeight() - 50, 100, 50, this);
         ball = new Shot(getWidth() / 2 - 30, getHeight() - 110, 50, 50, this);
+=======
+        player = new Player(270, 280, 15, 10, this);
+        setShot(null);
+>>>>>>> 9da96899814dba3b5cf5e027746c9c84f2dfe135
 
-        int blockNo = 0, hits = 3, counter = 0;
-        blocksLeft = 48;
-        blocks = new Block[blocksLeft];
-        for (int i = 0; i < 8; i++) {
+        int alienNo = 0;
+        aliensLeft = 24;
+        aliens = new Alien[aliensLeft];
+        for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 6; j++) {
-                blocks[blockNo] = new Block(j * 80 + 10, i * 30 + 40, hits, this);
-                blockNo++;
+                aliens[alienNo] = new Alien(150 + 18 * j, 5 + 18 * i, this);
+                alienNo++;
             }
-            
-            // Decrease by one the number of hits every two rows.
-            if (++counter >= 2) {
-                counter = 0;
-                hits = (hits - 1 <= 0) ? 1 : hits - 1;
-            }
-            
         }
 
         //starts to listen the keyboard input
@@ -131,23 +122,6 @@ public class Game implements Runnable {
         // Get keyboard input
         keyManager.tick();
         
-        // If the ball isn't moving, let the user push it (first hit)
-        if (!ballPushed) {
-            if (keyManager.left) {
-                getBall().setXSpeed(-5);
-                getBall().setYSpeed(-6);
-                getBall().setSpeed( Math.sqrt((-5 * -5) + (-6 * -6) ) );
-                ballPushed = true;
-            }
-            
-            if (keyManager.right) {
-                getBall().setXSpeed(5);
-                getBall().setYSpeed(-6);
-                getBall().setSpeed( Math.sqrt((-5 * -5) + (-6 * -6) ) );
-                ballPushed = true;
-            }
-        }
-        
         // Save the game data
         if (keyManager.g) {
             saveData();
@@ -155,7 +129,7 @@ public class Game implements Runnable {
         // Load the game data
         if (keyManager.c) {
             loadData();
-            setGameState((byte)0);
+            setGameState(GameState.PLAYING);
         }
         
         // To pause the game
@@ -168,7 +142,7 @@ public class Game implements Runnable {
         }
         
         // If the player won or lost
-        if (gameState == 1 || gameState == 2) {
+        if (getGameState() == GameState.WON || getGameState() == GameState.LOST) {
             if (keyManager.r) {
                 // Restart the game
                 restartGame();
@@ -176,33 +150,32 @@ public class Game implements Runnable {
         }
         
 
-        // If not paused and not lost or won
-        if (!paused && gameState == 0) {
+        // If not paused and game running (not lost or won)
+        if (!paused && getGameState() == GameState.PLAYING) {
 
-            // Move the bar with collision
-            bar.tick();
+            // Move the player with collision
+            player.tick();
 
-            // Make the blocks check for collisions with the ball
-            for (Block block : blocks) {
-                if (block.isVisible()) {
-                    block.tick();
+            // Make the blocks check for collisions with the shot
+            for (Alien alien : aliens) {
+                if (alien.isVisible()) {
+                    alien.tick();
                 }
             }
-                            
+            
             // Player wins
-            if (getBlocksLeft() <= 0) {
+            if (getAliensLeft() <= 0) {
                 // GAME OVER: Player wins
-                gameState = 2;
+                setGameState(GameState.WON);
             }
 
-            // Tick the power item
-            if (getPower() != null) {
-                if (!getPower().isSpawned())
-                    setPower(null);
+            // Tick the shot
+            if (getShot() != null) {
+                if (!getShot().isVisible())
+                    setShot(null);
                 else
-                    getPower().tick();
+                    shot.tick();
             }
-            ball.tick();
         }
         
     }
@@ -219,25 +192,35 @@ public class Game implements Runnable {
         } else {
             g = bs.getDrawGraphics();
             
+            // Draw the black background
+            g.setColor(Color.black);
+            g.fillRect(0, 0, width, height);
             
-            g.drawImage(Assets.background, 0, 0, width, height, null);
-            bar.render(g);
-            ball.render(g);
+            // Draw the green horizontal line
+            g.setColor(Color.green);
+            g.drawLine(0, 290, width, 290);
+            
+            // Draw the pleyer
+            player.render(g);
+            
+            // Draw the shot
+            if (getShot() != null)
+                shot.render(g);
 
-            for (Block block : blocks) {
-                if (block.isVisible()) {
-                    block.render(g);
+            for (Alien alien : aliens) {
+                if (alien.isVisible()) {
+                    alien.render(g);
                 }
             }
             
             // Display the score
-            g.setFont(scoreFont);
-            g.setColor(Color.black);
-            g.drawString("Score: " + getScore(), 40, 30);
+            g.setFont(gameFont);
+            g.setColor(Color.white);
+            g.drawString("SCORE: " + getScore(), 5, getHeight() - 5);
            
+            // Display "PAUSED"
             if (paused) {
-                g.setFont(pauseFont);
-                g.drawString("PAUSED", getWidth() / 6 + 18, getHeight() / 2);
+                showMessage(g, "PAUSED");
             }
             
             if (savedLoaded == 1) {
@@ -256,24 +239,15 @@ public class Game implements Runnable {
                 }
             }
             
-            if (getPower() != null) {
-                if (getPower().isSpawned())
-                    getPower().render(g);
-            }
-            
             // If the player lost
-            if (gameState == 1) {
-                g.setFont(pauseFont);
-                g.drawString("GAME OVER", getWidth() / 12, getHeight() / 2); 
-                g.setFont(new Font("Arial", Font.PLAIN, 40));
-                g.drawString("Press R to restart.", getWidth() / 6 + 15, getHeight() / 2 + 40);
+            if (getGameState() == GameState.LOST) {
+                showMessage(g, "GAME OVER");
+                g.drawString("Press R to restart.", getWidth() / 2 - 70, getHeight() / 2 + 18);
             }
             // If the player won
-            else if (gameState == 2) {
-                g.setFont(pauseFont);
-                g.drawString("YOU WIN!", getWidth() / 6 + 5, getHeight() / 2); 
-                g.setFont(new Font("Arial", Font.PLAIN, 40));
-                g.drawString("Press R to restart.", getWidth() / 6 + 15, getHeight() / 2 + 40);
+            else if (getGameState() == GameState.WON) {
+                showMessage(g, "YOU WIN!");
+                g.drawString("Press R to restart.", getWidth() / 2 - 70, getHeight() / 2 + 18);
             }
             
             // Prevents stutter on Linux.
@@ -308,30 +282,27 @@ public class Game implements Runnable {
      */
     public void restartGame() {
         setScore(0);
-        setGameState((byte)0);
+        setGameState(GameState.PLAYING);
         setPaused(false);
+<<<<<<< HEAD
         bar = new Bar(getWidth() / 2 - 50, getHeight() - 50, 100, 50, this);
         ball = new Shot(getWidth() / 2 - 30, getHeight() - 110, 50, 50, this);
         ballPushed = false;
         setPower(null);
         setPowerState((byte)0);
+=======
+        player = new Player(270, 280, 15, 10, this);
+        setShot(null);
+>>>>>>> 9da96899814dba3b5cf5e027746c9c84f2dfe135
         
-        int blockNo = 0, hits = 3, counter = 0;
-        blocksLeft = 48;
-        blocks = new Block[blocksLeft];
-        for (int i = 0; i < 8; i++) {
+        int alienNo = 0;
+        setAliensLeft(24);
+        aliens = new Alien[aliensLeft];
+        for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 6; j++) {
-                blocks[blockNo] = null;
-                blocks[blockNo] = new Block(j * 80 + 10, i * 30 + 40, hits, this);
-                blockNo++;
+                aliens[alienNo] = new Alien(150 + 18 * j, 5 + 18 * i, this);
+                alienNo++;
             }
-            
-            // Decrease by one the number of hits every two rows.
-            if (++counter >= 2) {
-                counter = 0;
-                hits = (hits - 1 <= 0) ? 1 : hits - 1;
-            }
-            
         }
     }
     
@@ -344,16 +315,16 @@ public class Game implements Runnable {
         
             // Print score.
             fileOut.println(getScore());
-            // Print the ball's x, y, xSpeed and ySpeed.
-            fileOut.println(getBall().getX() + " " + getBall().getY() + " " + getBall().getXSpeed() + " " + getBall().getYSpeed());
-            // Print the bar's x and y.
-            fileOut.println(getBar().getX() + " " + getBar().getY());
+            // Print the player's x and y.
+            fileOut.println(getPlayer().getX() + " " + getPlayer().getY());
+            // Print the shot's x, y, xSpeed and ySpeed.
+            fileOut.println(getShot().getX() + " " + getShot().getY() + " " + getShot().getSpeed());
             
-            // Print blocks' hits left. E.g.:
-            // 3 2 3 3 2 1 2 2 1 ...
-            for (Block block : blocks) {
-                fileOut.print(block.getHits() + " ");
-            }
+            /*
+            
+                IMPLEMENT THIS
+            
+             */
             
             fileOut.close();
             
@@ -384,42 +355,32 @@ public class Game implements Runnable {
                 
                 String values[];
                 
-                // ball x, y, xSpeed, ySpeed
+                // Player x and y
+                line = fileIn.readLine();
+                values = line.split(" ");
+                getPlayer().setX( Integer.parseInt(values[0]) );
+                getPlayer().setY( Integer.parseInt(values[1]) );
+                
+                // Shot x, y, xSpeed, ySpeed
                 line = fileIn.readLine();
                 values = line.split(" ");
                 
-                getBall().setX( Integer.parseInt(values[0]) );
-                getBall().setY( Integer.parseInt(values[1]) );
-                getBall().setXSpeed( Double.parseDouble(values[2]) );
-                getBall().setYSpeed( Double.parseDouble(values[3]) );
+                getShot().setX( Integer.parseInt(values[0]) );
+                getShot().setY( Integer.parseInt(values[1]) );
                 
-                // bar x and y
+                // Aliens' position and visible flag
                 line = fileIn.readLine();
                 values = line.split(" ");
                 
-                getBar().setX( Integer.parseInt(values[0]) );
-                getBar().setY( Integer.parseInt(values[1]) );
+                setAliensLeft(aliens.length);
                 
+                /*
+                    
+                    IMPLEMENT THIS
                 
-                // Blocks' hits
-                line = fileIn.readLine();
-                values = line.split(" ");
-                
-                setBlocksLeft(blocks.length);
-                
-                for (int i = 0; i < blocks.length; i++) {
-                    blocks[i].setHits( Integer.parseInt(values[i]) );
-                    if (blocks[i].getHits() <= 0) {
-                        blocks[i].setVisible(false);
-                        setBlocksLeft(getBlocksLeft() - 1);
-                    } else
-                        blocks[i].setVisible(true);
-                }
+                */
                 
                 fileIn.close();
-                
-                // Set power to null
-                setPower(null);
                 
                 savedLoaded = 2;
                 
@@ -439,10 +400,16 @@ public class Game implements Runnable {
      * @param text
      */
     public void showMessage(Graphics g, String text) {
-        g.setColor(Color.black);
-        g.setFont(pauseFont);
-        
-        g.drawString(text, getWidth() / 5, getHeight() / 2 + 60);
+        // Background
+        g.setColor(new Color(0, 32, 48));
+        g.fillRect(50, getWidth() / 2 - 30, getWidth() - 100, 50);
+
+        // Text
+        g.setColor(Color.white);
+        g.setFont(gameFont);
+        //g.drawString(text, getWidth() / 3 + 6 * text.length(), getWidth() / 2);
+        //g.drawString(text, 50 + getWidth() / 3 - 3 * text.length(), getWidth() / 2);
+        g.drawString(text, (getWidth() / 2) - (10 * text.length() / 2), getWidth() / 2);
     }
 
     /**
@@ -462,21 +429,25 @@ public class Game implements Runnable {
     }
     
     /**
-     * Get the bar
+     * Get the player
      *
      * @return
      */
-    public Bar getBar() {
-        return bar;
+    public Player getPlayer() {
+        return player;
     }
 
     /**
-     * Get the ball
-     *
-     * @return ball
+     * Get the shot
+     * @return shot
      */
+<<<<<<< HEAD
     public Shot getBall() {
         return ball;
+=======
+    public Shot getShot() {
+        return shot;
+>>>>>>> 9da96899814dba3b5cf5e027746c9c84f2dfe135
     }
 
     /**
@@ -496,35 +467,27 @@ public class Game implements Runnable {
     }
 
     /**
-     * Get blocksLeft
-     * @return blocksLeft
+     * Get aliensLeft
+     * @return aliensLeft
      */
-    public int getBlocksLeft() {
-        return blocksLeft;
+    public int getAliensLeft() {
+        return aliensLeft;
     }
 
     /**
      * Get gameState
      * @return 
      */
-    public byte getGameState() {
+    public GameState getGameState() {
         return gameState;
     }
-
+    
     /**
-     * Get power
-     * @return power
+     * Set shot
+     * @param shot 
      */
-    public Power getPower() {
-        return power;
-    }
-
-    /**
-     * Get powerState
-     * @return powerState
-     */
-    public byte getPowerState() {
-        return powerState;
+    public void setShot(Shot shot) {
+        this.shot = shot;
     }
     
     /**
@@ -536,11 +499,11 @@ public class Game implements Runnable {
     }
 
     /**
-     * Set blocksLeft
-     * @param blocksLeft 
+     * Set aliensLeft
+     * @param aliensLeft 
      */
-    public void setBlocksLeft(int blocksLeft) {
-        this.blocksLeft = blocksLeft;
+    public void setAliensLeft(int aliensLeft) {
+        this.aliensLeft = aliensLeft;
     }
 
     /**
@@ -555,23 +518,7 @@ public class Game implements Runnable {
      * Set gameState
      * @param gameState 
      */
-    public void setGameState(byte gameState) {
+    public void setGameState(GameState gameState) {
         this.gameState = gameState;
-    }
-
-    /**
-     * Set power
-     * @param power 
-     */
-    public void setPower(Power power) {
-        this.power = power;
-    }
-
-    /**
-     * Set powerState
-     * @param powerState 
-     */
-    public void setPowerState(byte powerState) {
-        this.powerState = powerState;
     }
 }

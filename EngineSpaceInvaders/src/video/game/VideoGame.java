@@ -8,7 +8,7 @@ package video.game;
 public class VideoGame {
 
     public static void main(String[] args) {
-        Game g = new Game("BreakingBad",500,700);
+        Game g = new Game("Space Invaders", 358, 350);
         g.start();
     }
 }
