@@ -13,10 +13,11 @@ public class KeyManager implements KeyListener{
     public boolean down;  //flag to move down the player
     public boolean left;  //flag to move left the player
     public boolean right; //flag to move right the player
+    public boolean space; //flag to shoot
     public boolean p;     //flag to pause the game
     public boolean r;     //flag to restart the game
     public boolean g;     //flag to save the game data
-    public boolean c;     // flag to load the game date
+    public boolean c;     //flag to load the game data
     
     public boolean keys[]; //stores all the flags for every key
     
@@ -43,6 +44,7 @@ public class KeyManager implements KeyListener{
       down = keys[KeyEvent.VK_DOWN];
       left = keys[KeyEvent.VK_LEFT];
       right = keys[KeyEvent.VK_RIGHT];
+      space = keys[KeyEvent.VK_SPACE];
       p = keys[KeyEvent.VK_P];
       r = keys[KeyEvent.VK_R];
       g = keys[KeyEvent.VK_G];
