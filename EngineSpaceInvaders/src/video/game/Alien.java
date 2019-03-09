@@ -14,7 +14,7 @@ public class Alien extends Item {
     private SoundClip explosion;    // sound effect for when the alien is killed
     
     /**
-     * Constructor for the blocks
+     * Constructor for the aliens
      * @param x
      * @param y
      * @param hits
