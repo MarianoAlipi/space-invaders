@@ -2,6 +2,7 @@ package video.game;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
@@ -11,6 +12,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import sun.font.FontDesignMetrics;
 
 /**
  *
@@ -157,7 +159,7 @@ public class Game implements Runnable {
                     alien.tick();
                 }
             }
-                            
+            
             // Player wins
             if (getAliensLeft() <= 0) {
                 // GAME OVER: Player wins
@@ -215,7 +217,7 @@ public class Game implements Runnable {
            
             // Display "PAUSED"
             if (paused) {
-                
+                /*
                 // Background
 		g.setColor(new Color(0, 32, 48));
 		g.fillRect(50, getWidth() / 2 - 30, getWidth() - 100, 50);
@@ -224,6 +226,8 @@ public class Game implements Runnable {
 		g.setColor(Color.white);
 		g.setFont(gameFont);
 		g.drawString("PAUSED", getWidth() / 3 + 30, getWidth() / 2);
+                */
+                showMessage(g, "PAUSED");
             }
             
             if (savedLoaded == 1) {
@@ -244,17 +248,13 @@ public class Game implements Runnable {
             
             // If the player lost
             if (getGameState() == GameState.LOST) {
-                g.setFont(gameFont);
-                g.drawString("GAME OVER", getWidth() / 12, getHeight() / 2); 
-                g.setFont(new Font("Arial", Font.PLAIN, 40));
-                g.drawString("Press R to restart.", getWidth() / 6 + 15, getHeight() / 2 + 40);
+                showMessage(g, "GAME OVER");
+                g.drawString("Press R to restart.", getWidth() / 2 - 70, getHeight() / 2 + 18);
             }
             // If the player won
             else if (getGameState() == GameState.WON) {
-                g.setFont(gameFont);
-                g.drawString("YOU WIN!", getWidth() / 6 + 5, getHeight() / 2); 
-                g.setFont(new Font("Arial", Font.PLAIN, 40));
-                g.drawString("Press R to restart.", getWidth() / 6 + 15, getHeight() / 2 + 40);
+                showMessage(g, "YOU WIN!");
+                g.drawString("Press R to restart.", getWidth() / 2 - 70, getHeight() / 2 + 18);
             }
             
             // Prevents stutter on Linux.
@@ -401,10 +401,16 @@ public class Game implements Runnable {
      * @param text
      */
     public void showMessage(Graphics g, String text) {
-        g.setColor(Color.black);
+        // Background
+        g.setColor(new Color(0, 32, 48));
+        g.fillRect(50, getWidth() / 2 - 30, getWidth() - 100, 50);
+
+        // Text
+        g.setColor(Color.white);
         g.setFont(gameFont);
-        
-        g.drawString(text, getWidth() / 5, getHeight() / 2 + 60);
+        //g.drawString(text, getWidth() / 3 + 6 * text.length(), getWidth() / 2);
+        //g.drawString(text, 50 + getWidth() / 3 - 3 * text.length(), getWidth() / 2);
+        g.drawString(text, (getWidth() / 2) - (10 * text.length() / 2), getWidth() / 2);
     }
 
     /**

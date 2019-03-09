@@ -50,6 +50,8 @@ public class Alien extends Item {
                 if (getHitbox().intersects(game.getShot().getHitbox())) {
                     setDying(true);
                     game.setShot(null);
+                    game.setAliensLeft(game.getAliensLeft() - 1);
+                    game.setScore(game.getScore() + 1);
                     explosion.play();
                 }
             }
