@@ -144,17 +144,37 @@ public class Game implements Runnable {
             }
         }
         
-
         // If not paused and game running (not lost or won)
         if (!paused && getGameState() == GameState.PLAYING) {
 
-            // Move the player with collision
+            // Move the player and handle events
             player.tick();
 
-            // Make the blocks check for collisions with the shot
             for (Alien alien : aliens) {
                 if (alien.isVisible()) {
+                    // Make the aliens check for collisions and shoot bombs
                     alien.tick();
+                    
+                    // Make the aliens go down when reaching the left wall
+                    if (alien.getX() <= 5 && alien.getDirection() == Alien.Direction.left) {
+                        for (Alien alien2 : aliens) {
+                            alien2.setY(alien2.getY() + 15);
+                            alien2.setDirection(Alien.Direction.right);
+                        }
+                    // Make the aliens go down when reaching the right wall
+                    } else if (alien.getX() >= getWidth() - 30 && alien.getDirection() == Alien.Direction.right) {
+                        for (Alien alien2 : aliens) {
+                            alien2.setY(alien2.getY() + 15);
+                            alien2.setDirection(Alien.Direction.left);
+                        }
+                    }
+                }
+                // Tick the bomb (if it exists)
+                if (alien.getBomb() != null) {
+                    if (alien.getBomb().isVisible())
+                        alien.getBomb().tick();
+                    else
+                        alien.setBomb(null);
                 }
             }
             
@@ -195,16 +215,24 @@ public class Game implements Runnable {
             g.setColor(Color.green);
             g.drawLine(0, 290, width, 290);
             
-            // Draw the pleyer
+            // Draw the player
             player.render(g);
-            
+           
             // Draw the shot
             if (getShot() != null)
                 shot.render(g);
 
+            // Draw the aliens
             for (Alien alien : aliens) {
                 if (alien.isVisible()) {
                     alien.render(g);
+                }
+                // Draw the bomb (if it exists)
+                if (alien.getBomb() != null) {
+                    if (alien.getBomb().isVisible())
+                        alien.getBomb().render(g);
+                    else
+                        alien.setBomb(null);
                 }
             }
             
@@ -236,17 +264,24 @@ public class Game implements Runnable {
             
             // If the player lost
             if (getGameState() == GameState.LOST) {
+                g.setColor(Color.black);
+                g.fillRect(0, 0, getWidth(), getHeight());
                 showMessage(g, "GAME OVER");
                 g.drawString("Press R to restart.", getWidth() / 2 - 70, getHeight() / 2 + 18);
+                g.drawString("SCORE: " + getScore(), getWidth() / 2 - 35, getHeight() / 2 + 50);
             }
             // If the player won
             else if (getGameState() == GameState.WON) {
+                g.setColor(Color.black);
+                g.fillRect(0, 0, getWidth(), getHeight());
                 showMessage(g, "YOU WIN!");
                 g.drawString("Press R to restart.", getWidth() / 2 - 70, getHeight() / 2 + 18);
+                g.drawString("SCORE: " + getScore(), getWidth() / 2 - 35, getHeight() / 2 + 50);
             }
             
             // Prevents stutter on Linux.
             Toolkit.getDefaultToolkit().sync();
+            
             bs.show();
             g.dispose();
         }
