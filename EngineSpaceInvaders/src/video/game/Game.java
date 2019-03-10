@@ -364,8 +364,6 @@ public class Game implements Runnable {
             }
             
             fileOut.close();
-            
-            System.out.println("Game saved.");
             savedLoaded = 1;
             
         } catch (IOException ex) {
@@ -386,39 +384,49 @@ public class Game implements Runnable {
             try {
                 String line;
                 
-                // Score
+                // Score.
                 line = fileIn.readLine();
                 setScore( Integer.parseInt(line) );
                 
                 String values[];
                 
-                // Player x and y
+                // Player's x position. Shot: visible, x, y.
                 line = fileIn.readLine();
                 values = line.split(" ");
                 getPlayer().setX( Integer.parseInt(values[0]) );
-                getPlayer().setY( Integer.parseInt(values[1]) );
+                if (Integer.parseInt(values[1]) == 0)
+                    setShot(null);
+                else {
+                    setShot( new Shot(Integer.parseInt(values[2]), Integer.parseInt(values[3]), this) );
+                }
                 
-                // Shot x, y, xSpeed, ySpeed
-                line = fileIn.readLine();
-                values = line.split(" ");
-                
-                getShot().setX( Integer.parseInt(values[0]) );
-                getShot().setY( Integer.parseInt(values[1]) );
-                
-                // Aliens' position and visible flag
-                line = fileIn.readLine();
-                values = line.split(" ");
-                
-                setAliensLeft(aliens.length);
-                
-                /*
+                // Alien: visible, x, y, direction (0: left, 1: right).
+                // Bomb: visible, x, y.
+                setAliensLeft(24);
+                for (int i = 0; i < getAliensLeft(); i++) {
+                    // Read the alien's data.
+                    line = fileIn.readLine();
+                    values = line.split(" ");
                     
-                    IMPLEMENT THIS
-                
-                */
+                    aliens[i] = new Alien(Integer.parseInt(values[1]), Integer.parseInt(values[2]), this);
+                    aliens[i].setDirection(Integer.parseInt(values[3]) == 0 ? Alien.Direction.left : Alien.Direction.right);
+                    
+                    if (Integer.parseInt(values[0]) == 0) {
+                        aliens[i].setVisible(false);
+                    }
+                    
+                    // Read the bomb's data.
+                    line = fileIn.readLine();
+                    values = line.split(" ");
+                    
+                    if (Integer.parseInt(values[0]) == 0)
+                        aliens[i].setBomb(null);
+                    else {
+                        aliens[i].setBomb(new Bomb(Integer.parseInt(values[1]), Integer.parseInt(values[2]), this));
+                    }
+                }
                 
                 fileIn.close();
-                
                 savedLoaded = 2;
                 
             } catch (IOException ex) {
