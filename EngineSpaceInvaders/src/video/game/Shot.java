@@ -11,7 +11,6 @@ import java.awt.Rectangle;
 public class Shot extends Item {
     
     private double speed;              // the shot's speed
-    private boolean collision;         // to check if there's a collision this frame
     private SoundClip sound;           // the shot's sound effect
     private Game game;                 // the running game
     
@@ -28,7 +27,6 @@ public class Shot extends Item {
       this.height = 5;
       this.game = game;
       this.speed = 4;
-      this.collision = false;
       this.visible = true;
       this.hitbox = new Rectangle(x, y, width, height);
       this.sound = new SoundClip("/sounds/pew.wav");
@@ -44,29 +42,13 @@ public class Shot extends Item {
     }
     
     /**
-     * Get collision
-     * @return collision
-     */
-    public boolean isCollision() {
-        return collision;
-    }
-    
-    /**
      * Set speed
      * @param speed 
      */
     public void setSpeed(double speed) {
         this.speed = speed;
     }
-    
-    /**
-     * Set collision
-     * @param collision 
-     */
-    public void setCollision(boolean collision) {
-        this.collision = collision;
-    }
-    
+
     //tick is used to check bar
     @Override
     public void tick() {
@@ -82,7 +64,6 @@ public class Shot extends Item {
         
         // Relocate hitbox
         hitbox.setLocation(getX(), getY());
-        setCollision(false);
     }
     
     //displays aka renders

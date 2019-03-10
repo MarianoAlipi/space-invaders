@@ -23,10 +23,10 @@ public class Game implements Runnable {
     private Graphics g;
     private Display display;
     String title;
-    private int width;
-    private int height;
+    private int width;                  // width of the game screen
+    private int height;                 // height of the game screen
     private Thread thread;
-    private boolean running;            //sets up the game
+    private boolean running;            // sets up the game
     private boolean paused;             // to pause the game
     public enum GameState {PLAYING, LOST, WON};
     private GameState gameState;        // flag for the game state.
@@ -112,6 +112,9 @@ public class Game implements Runnable {
         stop();
     }
 
+    /**
+     * Do the game's logic
+     */
     private void tick() {
         
         // Get keyboard input
@@ -192,6 +195,9 @@ public class Game implements Runnable {
         
     }
 
+    /**
+     * Display the game elements
+     */
     private void render() {
         //get the buffer strategy from the display
         bs = display.getCanvas().getBufferStrategy();

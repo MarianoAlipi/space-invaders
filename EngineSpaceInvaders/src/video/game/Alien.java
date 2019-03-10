@@ -18,8 +18,6 @@ public class Alien extends Item {
     private SoundClip explosion;    // sound effect for when the alien is killed
     private int framesCounter;      // to count a number of frames to show a different sprite
     
-    protected static boolean turning;   // to determine if the aliens should be turning when reaching a wall
-    
     /**
      * Constructor for the aliens
      * @param x
@@ -37,7 +35,6 @@ public class Alien extends Item {
         this.bomb = null;
         this.framesCounter = 0;
         this.explosion = new SoundClip("/sounds/explosion.wav");
-        Alien.turning = false;
     }
 
     @Override

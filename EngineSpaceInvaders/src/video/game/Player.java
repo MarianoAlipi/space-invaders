@@ -63,7 +63,6 @@ public class Player extends Item {
             if (game.getShot() == null)
                 game.setShot(new Shot(getX() + getWidth() / 2, getY() - 1, game));
         }
-        
       
         // Reset x position and y position if collision with screen limits
         if (getX() + getWidth() > game.getWidth() - 5) {
@@ -76,8 +75,12 @@ public class Player extends Item {
         hitbox.setLocation(getX(), getY());
     }
     
+    /**
+     * Display the player
+     * @param g 
+     */
     @Override
-    public void render(Graphics g){
+    public void render(Graphics g) {
         g.drawImage(Assets.player, getX(), getY(), getWidth(), getHeight(), null);
         // Draw the hitbox (for debugging)
         // g.drawRect((int)getHitbox().getX(), (int)getHitbox().getY(), (int)getHitbox().getWidth(), (int)getHitbox().getHeight());

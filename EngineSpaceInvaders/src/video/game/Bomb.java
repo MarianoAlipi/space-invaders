@@ -11,7 +11,6 @@ import java.awt.Rectangle;
 public class Bomb extends Item {
     
     private double speed;              // the bomb's speed
-    private boolean collision;         // to check if there's a collision this frame
     private SoundClip sound;           // the bomb's sound effect
     private Game game;                 // the running game
     
@@ -28,7 +27,6 @@ public class Bomb extends Item {
       this.height = 5;
       this.game = game;
       this.speed = 1;
-      this.collision = false;
       this.visible = true;
       this.hitbox = new Rectangle(x, y, width, height);
       this.sound = new SoundClip("/sounds/explosion.wav");
@@ -43,27 +41,11 @@ public class Bomb extends Item {
     }
     
     /**
-     * Get collision
-     * @return collision
-     */
-    public boolean isCollision() {
-        return collision;
-    }
-    
-    /**
      * Set speed
      * @param speed 
      */
     public void setSpeed(double speed) {
         this.speed = speed;
-    }
-    
-    /**
-     * Set collision
-     * @param collision 
-     */
-    public void setCollision(boolean collision) {
-        this.collision = collision;
     }
     
     @Override
@@ -89,7 +71,7 @@ public class Bomb extends Item {
         }
     }
     
-    //displays aka renders
+    // Display the bomb
     @Override
     public void render(Graphics g) {
         g.drawImage(Assets.bomb, getX(), getY(), getWidth(), getHeight(), null);
